@@ -38,3 +38,4 @@ jobs:
             echo "Schema wurde erfolgreich ausgelesen."
           else
             echo "Fehler: Schema-Ausgabe nicht gefunden!" && exit 1
+          fi
