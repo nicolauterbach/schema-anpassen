@@ -1,0 +1,28 @@
+name: Validate Schema Change
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  validate-schema:
+    if: contains(github.event.issue.labels.*.name, 'schema-anpassen')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Build Project with Maven
+        run: mvn clean package
+
+      # Testschritt: Kopiere die Testdatei in den Arbeitsbereich als "uploaded_schema.avsc"
+      - name: Copy Test Schema File
+        run: cp test_files/test_schema.avsc uploaded_schema.avsc
+
+      - name: Run SchemaReader
+        run: mvn exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader"

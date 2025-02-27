@@ -1,0 +1,110 @@
+name: Schema anpassen
+title: Schema anpassen <>
+
+description: >
+  Existierendes Schema anpassen. Änderungen in PREP oder PROD werden nur im Rahmen einer Change Task umgesetzt.
+
+labels:
+  - schema-anpassen
+  - Topic
+  - FOM
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Hier können Änderungen an existierenden Schemas beantragt werden. Es dürfen nur Anpassungen an einem Schema vorgenommen werden, die auch mit der Kompatibilität erlaubt sind.
+
+  - type: markdown
+    attributes:
+      value: ---
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: "Team"
+      description: Welchem Team ist das Topic zugehörig?
+      options:
+        - Neues Team (bitte im Freitext Teamname und Kontakt Email ergänzen)
+        - CARBONIQ
+        - CPS
+        - Dataland
+        - DQ Plattform
+        - DQS
+        - DQuantum
+        - ESG
+        - FoCs
+        - Global Format
+        - Gravitee
+        - INASYS
+        - iWHS
+        - Kafka
+        - klimaservice
+        - Rating Distiller
+        - reX
+        - SPOT
+        - Successfactors
+        - TXS
+        - WDS
+        - zebra
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: Topic
+    attributes:
+      label: "Topic"
+      description: Geben Sie untenstehend den Topicnamen an.
+      placeholder: de.nordlb.DEV.I009.Rating_Distiller.Geschaeftspartner.Rating.V001
+    validations:
+      required: true
+      pattern: '^de\.nordlb\.(TENT|TABS|DEV|PREP|PROD)\.[a-zA-Z]\d{3}\.([a-zA-Z0-9_]+\.)+V\d{3}$'
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: "Stage"
+      description: Wählen Sie die gewünschte Stage im Dropdown-Menü aus.
+      options:
+        - DEV
+        - TABS
+        - TENT
+        - PREP (Change Task erforderlich)
+        - PROD  (Change Task erforderlich)
+    validations:
+      required: true
+
+  - type: textarea
+    id: schema
+    attributes:
+      label: "Neues Schema"
+      placeholder: "<< Datei hineinziehen oder über Attach files auswählen >>"
+      description: >
+        Fügen Sie untenstehend das neue Schema als txt.-Datei an.
+    validations:
+      required: true
+
+  - type: input
+    id: changeTaskId
+    attributes:
+      label: Change Task ID (bei PREP/PROD)
+      description: Bei Änderungen in der PREP- oder PROD-Stage muss eine gültige Change Task ID angegeben werden.
+      placeholder: CTASK1234567
+
+  - type: input
+    id: changeTaskId_date
+    attributes:
+      label: Change Task Datum (bei PREP/PROD)
+      description: Geben Sie untenstehend das Datum der Change Task an.
+      placeholder: TT.MM.JJJJ
+
+  - type: textarea
+    id: additionalNotes
+    attributes:
+      label: Sonstige Angaben
+      description:
+        Weitere Angaben, wie Informationen für ein neues Team oder spezifische Konfigurationen (z. B. Retention Time),
+        die angepasst werden sollen. Geben Sie Konfigurationen als JSON-Objekt an.
+    validations:
+      required: false
