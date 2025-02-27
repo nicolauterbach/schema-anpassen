@@ -20,8 +20,18 @@ jobs:
       - name: Build Project with Maven
         run: mvn -f TopicConfig/pom.xml clean package
 
-      - name: Copy Test Schema File
-        run: cp TopicConfig/test_files/test_schema.avsc TopicConfig/uploaded_schema.avsc
+      - name: Download Schema Attachment
+        working-directory: TopicConfig
+        run: |
+          echo "Extracting attachment URL from issue body..."
+          attachment_url=$(echo "${{ github.event.issue.body }}" | grep -oE 'https://[^ ]+\.txt')
+          echo "Found attachment URL: $attachment_url"
+          if [ -z "$attachment_url" ]; then
+            echo "No attachment URL found, exiting." && exit 1
+          fi
+          echo "Downloading file..."
+          curl -L "$attachment_url" -o uploaded_schema.txt
+          ls -l uploaded_schema.txt
 
       - name: Run SchemaReader and capture output
         working-directory: TopicConfig
