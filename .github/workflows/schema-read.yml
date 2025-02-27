@@ -25,4 +25,5 @@ jobs:
         run: cp TopicConfig/test_files/test_schema.avsc uploaded_schema.avsc
 
       - name: Run SchemaReader
-        run: mvn -f TopicConfig/pom.xml exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader"
+        working-directory: TopicConfig
+        run: mvn exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader" -e
