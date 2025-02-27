@@ -18,11 +18,11 @@ jobs:
           java-version: '11'
 
       - name: Build Project with Maven
-        run: mvn clean package
+        run: mvn -f TopicConfig/pom.xml clean package
 
       # Testschritt: Kopiere die Testdatei in den Arbeitsbereich als "uploaded_schema.avsc"
       - name: Copy Test Schema File
-        run: cp test_files/test_schema.avsc uploaded_schema.avsc
+        run: cp TopicConfig/test_files/test_schema.avsc uploaded_schema.avsc
 
       - name: Run SchemaReader
         run: mvn exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader"
