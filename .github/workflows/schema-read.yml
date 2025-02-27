@@ -20,21 +20,22 @@ jobs:
       - name: Build Project with Maven
         run: mvn -f TopicConfig/pom.xml clean package
 
-      # Testschritt: Kopiere die Testdatei in den Arbeitsbereich als "uploaded_schema.avsc"
       - name: Copy Test Schema File
-        run: cp TopicConfig/test_files/test_schema.avsc uploaded_schema.avsc
-
-      - name: Run SchemaReader
-        working-directory: TopicConfig
-        run: mvn exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader" -e
+        run: cp TopicConfig/test_files/test_schema.avsc TopicConfig/uploaded_schema.avsc
 
       - name: Run SchemaReader and capture output
         working-directory: TopicConfig
-        run: mvn exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader" | tee schema_output.log
+        run: |
+          mvn exec:java -Dexec.mainClass="de.nordlb.kafka.specification.schema.validation.SchemaReader" | tee schema_output.log
+
+      - name: Debug List Files in TopicConfig
+        working-directory: TopicConfig
+        run: ls -l
 
       - name: Verify Schema Output
+        working-directory: TopicConfig
         run: |
-          if grep -q "Ausgelesenes Schema:" schema_output.log; then
+          if grep -q 'Ausgelesenes Schema:' schema_output.log; then
             echo "Schema wurde erfolgreich ausgelesen."
           else
             echo "Fehler: Schema-Ausgabe nicht gefunden!" && exit 1
